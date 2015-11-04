@@ -55,5 +55,6 @@ add_executable(
 )
 target_link_libraries(
     testing_node
+    ${PROJECT_NAME}
     ${catkin_LIBRARIES}
 )

@@ -10,15 +10,38 @@
 
 #include "lar_tools.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <strings.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <signal.h>
+
+
 namespace lar_tools {
 
     class UDPNode {
     public:
-        UDPNode();
+        UDPNode(unsigned short port);
+        UDPNode(std::string remote_address,unsigned short port);
         UDPNode(const UDPNode& orig);
         virtual ~UDPNode();
+        bool isReady();
+        bool receive(void* data,int data_length);
+        bool send(void* data,int data_length);
+        void disconnect();
     private:
-
+        void init();
+        int sock; /* Socket */
+        struct sockaddr_in remote_address;
+        struct sockaddr_in local_address;
+        bool ready;
+        static std::vector<UDPNode *> instances;
+        static void handleSignals(int signum);
     };
 
 }
