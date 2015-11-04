@@ -21,6 +21,8 @@ set(CMAKE_INCLUDE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/${PROJECT_NAME}
 
 catkin_package(
    CATKIN_DEPENDS
+   roscpp
+   rospy
    message_runtime
    geometry_msgs
    std_msgs
@@ -51,7 +53,7 @@ add_executable(
     testing_node
     src/nodes/test/testing_node.cpp
 )
-add_dependencies(
+target_link_libraries(
     testing_node
     ${catkin_LIBRARIES}
 )
