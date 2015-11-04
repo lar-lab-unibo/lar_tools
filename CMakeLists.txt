@@ -26,6 +26,8 @@ catkin_package(
    message_runtime
    geometry_msgs
    std_msgs
+   INCLUDE_DIRS include 
+   LIBRARIES ${PROJECT_NAME}
 )
 
 include_directories(
@@ -58,3 +60,8 @@ target_link_libraries(
     ${PROJECT_NAME}
     ${catkin_LIBRARIES}
 )
+
+
+# INSTALL
+
+## Install project namespaced headers

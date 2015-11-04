@@ -1,6 +1,0 @@
-[ 50%] Building CXX object lar_tools/CMakeFiles/lar_tools.dir/src/utils/UDPNode.cpp.o
-Linking CXX shared library ../devel/lib/liblar_tools.so
-[ 50%] Built target lar_tools
-[100%] Building CXX object lar_tools/CMakeFiles/testing_node.dir/src/nodes/test/testing_node.cpp.o
-Linking CXX executable ../devel/lib/lar_tools/testing_node
-[100%] Built target testing_node

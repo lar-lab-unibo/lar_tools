@@ -1,49 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="95">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
-    <df root="../.." name="0">
-      <df name="lar_tools">
-        <df name="include">
-          <df name="utils">
-            <in>UDPNode.h</in>
-            <in>UDPNode.h</in>
-          </df>
-          <in>lar_tools.h</in>
-          <in>lar_tools.h</in>
+    <df root=".." name="0">
+      <df name="include">
+        <df name="utils">
+          <in>UDPNode.h</in>
         </df>
-        <df name="lar_tools_project">
-        </df>
-        <df name="scripts">
-          <df name="gnome-terminal">
-            <df name="gconf-default">
-              <df name="global">
+        <in>lar_tools.h</in>
+      </df>
+      <df name="lar_tools_project">
+      </df>
+      <df name="scripts">
+        <df name="gnome-terminal">
+          <df name="gconf-default">
+            <df name="global">
+            </df>
+            <df name="profiles">
+              <df name="Default">
               </df>
-              <df name="profiles">
-                <df name="Default">
-                </df>
-                <df name="Profile0">
-                </df>
-                <df name="Profile1">
-                </df>
-                <df name="Profile2">
-                </df>
-                <df name="Profile3">
-                </df>
-                <df name="Profile4">
-                </df>
+              <df name="Profile0">
+              </df>
+              <df name="Profile1">
+              </df>
+              <df name="Profile2">
+              </df>
+              <df name="Profile3">
+              </df>
+              <df name="Profile4">
               </df>
             </df>
           </df>
         </df>
-        <df name="src">
-          <df name="nodes">
-            <df name="test">
-              <in>testing_node.cpp</in>
-            </df>
+      </df>
+      <df name="src">
+        <df name="nodes">
+          <df name="test">
+            <in>testing_node.cpp</in>
           </df>
-          <df name="utils">
-            <in>UDPNode.cpp</in>
-          </df>
+        </df>
+        <df name="utils">
+          <in>UDPNode.cpp</in>
         </df>
       </df>
     </df>

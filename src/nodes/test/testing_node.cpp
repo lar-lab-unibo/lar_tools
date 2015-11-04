@@ -26,7 +26,7 @@ void senderFunc()
        message m;
        m.command = 124;
        m.payload[0] = p;
-       p+=0.01f;
+       p+=0.04f;
        bool s = node.send(&m,sizeof(m));
    }
 }
