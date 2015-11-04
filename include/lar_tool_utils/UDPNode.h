@@ -23,25 +23,27 @@
 
 
 namespace lar_tools {
-    
-    struct UDPNodeMessage{
+
+    struct UDPNodeMessage {
         int command;
         long time;
-        float payload[32];
-    };
-    
+        float payload[8];
+    } StructuredMessage;
+
     class UDPNode {
     public:
         UDPNode(unsigned short port);
-        UDPNode(std::string remote_address,unsigned short port);
+        UDPNode(std::string remote_address, unsigned short port);
         UDPNode(const UDPNode& orig);
         virtual ~UDPNode();
         bool isReady();
-        bool receive(void* data,int data_length);
-        bool send(void* data,int data_length);
+        bool receive(void* data, int data_length);
+        bool send(void* data, int data_length);
         bool receiveMessage(UDPNodeMessage& message);
         bool sendMessage(const UDPNodeMessage& message);
-        void disconnect(); 
+        void disconnect();
+
+
     private:
         void init();
         int sock; /* Socket */

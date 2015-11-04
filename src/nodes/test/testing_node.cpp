@@ -8,7 +8,7 @@
 #include <boost/date_time.hpp>
 
 #include "lar_tools.h"
-#include "UDPNode.h"
+#include "lar_tool_utils/UDPNode.h"
 
 using namespace lar_tools;
 
