@@ -12,7 +12,7 @@
 
 namespace lar_tools{
     
-    std::string package_name_prefix = "lar_tools";
+    std::string package_name_prefix = "lar_";
     
     void init_ros_node(int argc, char** argv,std::string name){
         std::stringstream ss;

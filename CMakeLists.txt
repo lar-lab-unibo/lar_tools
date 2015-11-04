@@ -26,13 +26,13 @@ catkin_package(
    message_runtime
    geometry_msgs
    std_msgs
-   INCLUDE_DIRS include 
+   INCLUDE_DIRS include  include/lar_tool_utils
    LIBRARIES ${PROJECT_NAME}
 )
 
 include_directories(
   include
-  include/utils
+  include/lar_tool_utils
   ${Boost_INCLUDE_DIR}
   ${catkin_INCLUDE_DIRS}
 )
@@ -40,7 +40,7 @@ include_directories(
 ## LWR HW BASE CLASS TO RULE'EM ALL
 add_library(
   ${PROJECT_NAME}
-  src/utils/UDPNode.cpp
+  src/lar_tool_utils/UDPNode.cpp
 )
 target_link_libraries(
   ${PROJECT_NAME}

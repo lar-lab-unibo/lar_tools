@@ -23,7 +23,13 @@
 
 
 namespace lar_tools {
-
+    
+    struct UDPNodeMessage{
+        int command;
+        long time;
+        float payload[32];
+    };
+    
     class UDPNode {
     public:
         UDPNode(unsigned short port);
@@ -33,7 +39,9 @@ namespace lar_tools {
         bool isReady();
         bool receive(void* data,int data_length);
         bool send(void* data,int data_length);
-        void disconnect();
+        bool receiveMessage(UDPNodeMessage& message);
+        bool sendMessage(const UDPNodeMessage& message);
+        void disconnect(); 
     private:
         void init();
         int sock; /* Socket */

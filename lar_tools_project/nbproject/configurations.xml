@@ -44,13 +44,13 @@
     </logicalFolder>
     <df root=".." name="0">
       <df name="src">
+        <df name="lar_tool_utils">
+          <in>UDPNode.cpp</in>
+        </df>
         <df name="nodes">
           <df name="test">
             <in>testing_node.cpp</in>
           </df>
-        </df>
-        <df name="utils">
-          <in>UDPNode.cpp</in>
         </df>
       </df>
     </df>
@@ -244,22 +244,22 @@
       <item path="../../kuka-lwr/lwr_testing/src/lwr_test.cpp"
             ex="false"
             tool="1"
-            flavor2="0">
+            flavor2="4">
       </item>
       <item path="../../trimod_gripper/src/test.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="../src/nodes/test/testing_node.cpp" ex="false" tool="1" flavor2="4">
-      </item>
-      <item path="../src/utils/UDPNode.cpp" ex="false" tool="1" flavor2="4">
+      <item path="../src/lar_tool_utils/UDPNode.cpp" ex="false" tool="1" flavor2="4">
         <ccTool flags="0">
         </ccTool>
+      </item>
+      <item path="../src/nodes/test/testing_node.cpp" ex="false" tool="1" flavor2="4">
       </item>
       <folder path="0">
         <ccTool>
           <incDir>
             <pElem>/opt/ros/indigo/include</pElem>
             <pElem>../include</pElem>
-            <pElem>../include/utils</pElem>
+            <pElem>../include/lar_tool_utils</pElem>
             <pElem>../../../build/lar_tools</pElem>
           </incDir>
           <preprocessorList>
@@ -267,7 +267,7 @@
           </preprocessorList>
         </ccTool>
       </folder>
-      <folder path="0/src/utils">
+      <folder path="0/src/lar_tool_utils">
         <ccTool>
           <preprocessorList>
             <Elem>lar_tools_EXPORTS</Elem>
@@ -348,13 +348,16 @@
       <folder path="src">
         <ccTool>
           <incDir>
-            <pElem>../include</pElem>
+            <pElem>../../../devel/include</pElem>
+            <pElem>../../kuka-lwr/lwr_controllers/include</pElem>
             <pElem>/opt/ros/indigo/include</pElem>
             <pElem>/usr/include/opencv</pElem>
             <pElem>/usr/include/eigen3</pElem>
             <pElem>/usr/include/pcl-1.7</pElem>
             <pElem>/usr/include/ni</pElem>
             <pElem>/usr/include/vtk-5.8</pElem>
+            <pElem>../include</pElem>
+            <pElem>../include/lar_tool_utils</pElem>
             <pElem>/usr/local/include/pcl-1.8</pElem>
             <pElem>/usr/include/openni2</pElem>
             <pElem>/usr/local/include/opencv</pElem>

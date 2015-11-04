@@ -5,7 +5,7 @@
  * Created on 4 novembre 2015, 12.08
  */
 
-#include "UDPNode.h"
+#include "lar_tool_utils/UDPNode.h"
 namespace lar_tools {
 
     std::vector<UDPNode *> UDPNode::instances;
@@ -82,8 +82,16 @@ namespace lar_tools {
     }
 
     bool UDPNode::send(void* data, int data_length) {
-        return sendto(this->sock, data, data_length, 0, (struct sockaddr *)
-                &this->remote_address, sizeof (this->remote_address));
+        return sendto(this->sock, data, data_length, 0, (struct sockaddr *) & this->remote_address, sizeof (this->remote_address));
+        
+    }
+
+    bool UDPNode::receiveMessage(UDPNodeMessage& message) {
+        return receive(&message,sizeof(message));
+    }   
+
+    bool UDPNode::sendMessage(const UDPNodeMessage& message) {
+        return send((void *)&message,sizeof(message));
     }
 
     bool UDPNode::isReady() {
