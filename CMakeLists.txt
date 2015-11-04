@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
+
 project(lar_tools)
 
 find_package(catkin REQUIRED COMPONENTS
@@ -24,8 +25,33 @@ catkin_package(
    geometry_msgs
    std_msgs
 )
-x
 
-# lwr hw fri node
-##(lwr_test ${catkin_LIBRARIES} ${OpenCV_LIBS} ${PCL_LIBRARIES})
-#add_dependencies(lwr_test lwr_testing_generate_messages_cpp)
+include_directories(
+  include
+  include/utils
+  ${Boost_INCLUDE_DIR}
+  ${catkin_INCLUDE_DIRS}
+)
+
+## LWR HW BASE CLASS TO RULE'EM ALL
+add_library(
+  ${PROJECT_NAME}
+  src/utils/UDPNode.cpp
+)
+target_link_libraries(
+  ${PROJECT_NAME}
+  ${catkin_LIBRARIES}
+)
+
+
+# NODES
+
+# TESTING NODE
+add_executable(
+    testing_node
+    src/nodes/test/testing_node.cpp
+)
+add_dependencies(
+    testing_node
+    ${catkin_LIBRARIES}
+)
