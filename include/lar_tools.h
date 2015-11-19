@@ -96,6 +96,24 @@ void kdl_to_eigen_4x4(KDL::Frame& frame, Eigen::Matrix4f& mat) {
 }
 
 /**
+ * KDL Frame to Eigen Matrix 4x4
+ * @param frame KDL Frame
+ * @param mat Eigen Matrix 4x4
+ */
+void kdl_to_eigen_4x4_d(KDL::Frame& frame, Eigen::Matrix4d& mat) {
+        for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                        mat(i, j) = frame.M(i, j);
+                }
+        }
+
+        mat(0, 3) = frame.p[0];
+        mat(1, 3) = frame.p[1];
+        mat(2, 3) = frame.p[2];
+        mat(3, 3) = 1;
+}
+
+/**
  * Creates Eigen4x4 Matrix
  * @param x
  * @param y
@@ -110,6 +128,23 @@ void create_eigen_4x4(float x, float y, float z, float roll, float pitch, float 
         create_kdl_frame(x, y, z, roll, pitch, yaw, frame);
         kdl_to_eigen_4x4(frame, mat);
 }
+
+/**
+ * Creates Eigen4x4 Matrix
+ * @param x
+ * @param y
+ * @param z
+ * @param roll
+ * @param pitch
+ * @param yaw
+ * @param mat
+ */
+void create_eigen_4x4_d(float x, float y, float z, float roll, float pitch, float yaw, Eigen::Matrix4d& mat) {
+        KDL::Frame frame;
+        create_kdl_frame(x, y, z, roll, pitch, yaw, frame);
+        kdl_to_eigen_4x4_d(frame, mat);
+}
+
 
 /**
  * Inverts 4x4 Transformation matrix
