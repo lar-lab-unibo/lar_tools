@@ -16,24 +16,42 @@ ArmControlGui::ArmControlGui(std::string robot_name,QWidget *parent) :
 {
     ui->setupUi(this);
 
+
+
+
+
+
+
     /* USER FOLDER */
     this->robot_name = QString(robot_name.c_str());
     this->user_folder = this->createUserFolder(this->robot_name);
     this->initializeUserFolder();
 
-
     /* SLIDERS */
     this->sliders_joints.resize(ARMCONTROLGUI_ARM_JOINTS_SIZE);
     this->lcd_joints.resize(ARMCONTROLGUI_ARM_JOINTS_SIZE);
+    this->lcd_joints_real.resize(ARMCONTROLGUI_ARM_JOINTS_SIZE);
 
     for(int i = 0; i < ARMCONTROLGUI_ARM_JOINTS_SIZE; i++){
         QSlider* slider = ui->group_joints->findChild<QSlider*>(QString("slider_j%1").arg(i+1));
         QLCDNumber* lcd = ui->group_joints->findChild<QLCDNumber*>(QString("lcd_j%1").arg(i+1));
+        QLCDNumber* lcd_real = ui->group_joints->findChild<QLCDNumber*>(QString("lcd_jreal%1").arg(i+1));
         this->sliders_joints[i] = slider;
         this->lcd_joints[i] = lcd;
+        this->lcd_joints_real[i] = lcd_real;
         connect(slider,SIGNAL(valueChanged(int)),this,SLOT(jointsSignal(int)));
     }
     this->updateJointsLCD();
+    //CARTESIAN
+    connect(ui->slider_cart_x,SIGNAL(valueChanged(int)),this,SLOT(cartesiansSignal(int)));
+    connect(ui->slider_cart_y,SIGNAL(valueChanged(int)),this,SLOT(cartesiansSignal(int)));
+    connect(ui->slider_cart_z,SIGNAL(valueChanged(int)),this,SLOT(cartesiansSignal(int)));
+    connect(ui->slider_cart_roll,SIGNAL(valueChanged(int)),this,SLOT(cartesiansSignal(int)));
+    connect(ui->slider_cart_pitch,SIGNAL(valueChanged(int)),this,SLOT(cartesiansSignal(int)));
+    connect(ui->slider_cart_yaw,SIGNAL(valueChanged(int)),this,SLOT(cartesiansSignal(int)));
+
+
+
 
     /* BUTTONS */
     connect(ui->btn_shape_save, SIGNAL (released()),this, SLOT (btnSaveShape()));
@@ -42,6 +60,18 @@ ArmControlGui::ArmControlGui(std::string robot_name,QWidget *parent) :
 
     /* LISTS */
     connect(ui->list_shapes, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(listShapeClick(QListWidgetItem*)));
+
+
+
+    /* SOCKETS */
+    this->receive_socket = new QUdpSocket(this);
+    this->receive_socket->bind(QHostAddress::LocalHost, 7751);
+    this->send_socket = new QUdpSocket(this);
+    this->remote_host = QHostAddress::LocalHost;
+    this->remote_port = 7750;
+    this->time =0;
+    receive_thread = new MyThread("receive_thread",this,receive_socket);
+    receive_thread->start();
 }
 
 /**
@@ -50,6 +80,12 @@ ArmControlGui::ArmControlGui(std::string robot_name,QWidget *parent) :
 ArmControlGui::~ArmControlGui()
 {
     delete ui;
+}
+
+void ArmControlGui::receiveMessage(){
+    while (this->receive_socket->hasPendingDatagrams()) {
+        qDebug()<<"OK";
+    }
 }
 
 /**
@@ -91,6 +127,27 @@ void ArmControlGui::jointsSignal(int value){
     QSlider* obj = (QSlider*)sender();
     qDebug()<<obj->objectName()<<" "<<value;
     this->updateJointsLCD();
+    this->sendJoints();
+}
+
+/**
+ * @brief ArmControlGui::sendJoints
+ */
+void ArmControlGui::sendJoints(){
+    this->send_message.command=333;
+    for(int i = 0; i < ARMCONTROLGUI_ARM_JOINTS_SIZE; i++){
+        this->send_message.payload[i] = this->sliders_joints[i]->value();
+    }
+    char* arr = reinterpret_cast<char*>(&this->send_message);
+    this->send_socket->writeDatagram(arr,sizeof(this->send_message),this->remote_host,this->remote_port);
+}
+
+/**
+ * @brief ArmControlGui::cartesiansSignal
+ * @param value
+ */
+void ArmControlGui::cartesiansSignal(int value){
+    this->updateCartesianLCD();
 }
 
 /**
@@ -107,6 +164,19 @@ void ArmControlGui::updateJointsLCD(){
 }
 
 /**
+ * @brief ArmControlGui::updateCartesianLCD
+ */
+void ArmControlGui::updateCartesianLCD(){
+
+    ui->lcd_cart_x->display(ui->slider_cart_x->value());
+    ui->lcd_cart_y->display(ui->slider_cart_y->value());
+    ui->lcd_cart_z->display(ui->slider_cart_z->value());
+    ui->lcd_cart_roll->display(ui->slider_cart_roll->value());
+    ui->lcd_cart_pitch->display(ui->slider_cart_pitch->value());
+    ui->lcd_cart_yaw->display(ui->slider_cart_yaw->value());
+}
+
+/**
  * @brief ArmControlGui::btnSaveShape
  */
 void ArmControlGui::btnSaveShape(){
@@ -119,6 +189,7 @@ void ArmControlGui::btnSaveShape(){
     if(ok){
         JointShape shape = this->getCurrentJointShape(text);
         this->saveShape(shape);
+        this->loadShapes();
     }else{
 
     }
@@ -266,5 +337,20 @@ void ArmControlGui::setCurrentJointShape(JointShape &shape){
     for(int i = 0; i < ARMCONTROLGUI_ARM_JOINTS_SIZE; i++){
         slider = this->sliders_joints[i];
         slider->setValue(shape.joints[i]);
+    }
+}
+
+/**
+ * @brief ArmControlGui::consumeUDPMessage
+ * @param message
+ */
+void ArmControlGui::consumeUDPMessage(UDPMessage &message){
+
+    if(message.command==333){
+        QLCDNumber* lcd;
+        for(int i = 0; i < ARMCONTROLGUI_ARM_JOINTS_SIZE; i++){
+            lcd = this->lcd_joints_real[i];
+            lcd->display(message.payload[i]);
+        }
     }
 }

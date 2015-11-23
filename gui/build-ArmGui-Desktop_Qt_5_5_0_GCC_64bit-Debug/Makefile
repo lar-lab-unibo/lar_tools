@@ -12,10 +12,10 @@ MAKEFILE      = Makefile
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
+DEFINES       = -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../ArmGui -I. -I/home/daniele/work/frameworks/Qt/5.5/gcc_64/include -I/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets -I/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui -I/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtCore -I. -I. -I/home/daniele/work/frameworks/Qt/5.5/gcc_64/mkspecs/linux-g++
+INCPATH       = -I../ArmGui -I. -I/home/daniele/work/frameworks/Qt/5.5/gcc_64/include -I/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets -I/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui -I/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtNetwork -I/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtCore -I. -I. -I/home/daniele/work/frameworks/Qt/5.5/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/daniele/work/frameworks/Qt/5.5/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -36,7 +36,7 @@ DISTNAME      = ArmGui1.0.0
 DISTDIR = /home/daniele/Scrivania/pippo/src/lar_tools/gui/build-ArmGui-Desktop_Qt_5_5_0_GCC_64bit-Debug/.tmp/ArmGui1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-rpath,/home/daniele/work/frameworks/Qt/5.5/gcc_64 -Wl,-rpath,/home/daniele/work/frameworks/Qt/5.5/gcc_64/lib
-LIBS          = $(SUBLIBS) -L/home/daniele/work/frameworks/Qt/5.5/gcc_64/lib -lQt5Widgets -L/usr/lib64 -lQt5Gui -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -L/home/daniele/work/frameworks/Qt/5.5/gcc_64/lib -lQt5Widgets -L/usr/lib64 -lQt5Gui -lQt5Network -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -348,6 +348,7 @@ Makefile: ../ArmGui/ArmGui.pro /home/daniele/work/frameworks/Qt/5.5/gcc_64/mkspe
 		../ArmGui/ArmGui.pro \
 		/home/daniele/work/frameworks/Qt/5.5/gcc_64/lib/libQt5Widgets.prl \
 		/home/daniele/work/frameworks/Qt/5.5/gcc_64/lib/libQt5Gui.prl \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/lib/libQt5Network.prl \
 		/home/daniele/work/frameworks/Qt/5.5/gcc_64/lib/libQt5Core.prl
 	$(QMAKE) -spec linux-g++ CONFIG+=debug -o Makefile ../ArmGui/ArmGui.pro
 /home/daniele/work/frameworks/Qt/5.5/gcc_64/mkspecs/features/spec_pre.prf:
@@ -483,6 +484,7 @@ Makefile: ../ArmGui/ArmGui.pro /home/daniele/work/frameworks/Qt/5.5/gcc_64/mkspe
 ../ArmGui/ArmGui.pro:
 /home/daniele/work/frameworks/Qt/5.5/gcc_64/lib/libQt5Widgets.prl:
 /home/daniele/work/frameworks/Qt/5.5/gcc_64/lib/libQt5Gui.prl:
+/home/daniele/work/frameworks/Qt/5.5/gcc_64/lib/libQt5Network.prl:
 /home/daniele/work/frameworks/Qt/5.5/gcc_64/lib/libQt5Core.prl:
 qmake: FORCE
 	@$(QMAKE) -spec linux-g++ CONFIG+=debug -o Makefile ../ArmGui/ArmGui.pro
@@ -631,8 +633,41 @@ moc_armcontrolgui.cpp: /home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWid
 		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui/qtouchdevice.h \
 		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qtabwidget.h \
 		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui/qicon.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QSlider \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qslider.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qabstractslider.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QLCDNumber \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qlcdnumber.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qframe.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QInputDialog \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qinputdialog.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qdialog.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qlineedit.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui/qtextcursor.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui/qtextformat.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui/qpen.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui/qtextoption.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QListWidgetItem \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qlistwidget.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qlistview.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qabstractitemview.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtCore/qabstractitemmodel.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtCore/qitemselectionmodel.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qstyleoption.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui/qvalidator.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtCore/qregularexpression.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qstyle.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qtabbar.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qrubberband.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtNetwork/QUdpSocket \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtNetwork/qudpsocket.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtNetwork/qabstractsocket.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtNetwork/qhostaddress.h \
 		../ArmGui/armcontrolgui.h
-	/home/daniele/work/frameworks/Qt/5.5/gcc_64/bin/moc $(DEFINES) -I/home/daniele/work/frameworks/Qt/5.5/gcc_64/mkspecs/linux-g++ -I/home/daniele/Scrivania/pippo/src/lar_tools/gui/ArmGui -I/home/daniele/work/frameworks/Qt/5.5/gcc_64/include -I/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets -I/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui -I/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtCore -I. ../ArmGui/armcontrolgui.h -o moc_armcontrolgui.cpp
+	/home/daniele/work/frameworks/Qt/5.5/gcc_64/bin/moc $(DEFINES) -I/home/daniele/work/frameworks/Qt/5.5/gcc_64/mkspecs/linux-g++ -I/home/daniele/Scrivania/pippo/src/lar_tools/gui/ArmGui -I/home/daniele/work/frameworks/Qt/5.5/gcc_64/include -I/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets -I/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui -I/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtNetwork -I/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtCore -I. ../ArmGui/armcontrolgui.h -o moc_armcontrolgui.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -758,6 +793,39 @@ main.o: ../ArmGui/main.cpp ../ArmGui/armcontrolgui.h \
 		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui/qtouchdevice.h \
 		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qtabwidget.h \
 		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui/qicon.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QSlider \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qslider.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qabstractslider.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QLCDNumber \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qlcdnumber.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qframe.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QInputDialog \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qinputdialog.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qdialog.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qlineedit.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui/qtextcursor.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui/qtextformat.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui/qpen.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui/qtextoption.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QListWidgetItem \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qlistwidget.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qlistview.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qabstractitemview.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtCore/qabstractitemmodel.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtCore/qitemselectionmodel.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qstyleoption.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui/qvalidator.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtCore/qregularexpression.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qstyle.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qtabbar.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qrubberband.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtNetwork/QUdpSocket \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtNetwork/qudpsocket.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtNetwork/qabstractsocket.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtNetwork/qhostaddress.h \
 		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QApplication \
 		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qapplication.h \
 		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtCore/qcoreapplication.h \
@@ -873,7 +941,84 @@ armcontrolgui.o: ../ArmGui/armcontrolgui.cpp ../ArmGui/armcontrolgui.h \
 		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui/qtouchdevice.h \
 		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qtabwidget.h \
 		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui/qicon.h \
-		ui_armcontrolgui.h
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QSlider \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qslider.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qabstractslider.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QLCDNumber \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qlcdnumber.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qframe.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QInputDialog \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qinputdialog.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qdialog.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qlineedit.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui/qtextcursor.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui/qtextformat.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui/qpen.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui/qtextoption.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QListWidgetItem \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qlistwidget.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qlistview.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qabstractitemview.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtCore/qabstractitemmodel.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtCore/qitemselectionmodel.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qstyleoption.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui/qvalidator.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtCore/qregularexpression.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qstyle.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qtabbar.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qrubberband.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtNetwork/QUdpSocket \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtNetwork/qudpsocket.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtNetwork/qabstractsocket.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtNetwork/qhostaddress.h \
+		ui_armcontrolgui.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtCore/QVariant \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QAction \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qaction.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qactiongroup.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QApplication \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qapplication.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtCore/qcoreapplication.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtCore/qeventloop.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui/qguiapplication.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtGui/qinputmethod.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QButtonGroup \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qbuttongroup.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QGridLayout \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qgridlayout.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qlayout.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qlayoutitem.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qboxlayout.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QGroupBox \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qgroupbox.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QHBoxLayout \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QHeaderView \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qheaderview.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QLabel \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qlabel.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QListWidget \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QMenuBar \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qmenubar.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qmenu.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QPushButton \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qpushbutton.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qabstractbutton.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QStatusBar \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qstatusbar.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QToolBar \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/qtoolbar.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QVBoxLayout \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtWidgets/QWidget \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtCore/QDebug \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtCore/QDir \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtCore/qdir.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtCore/qfileinfo.h \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtCore/QDirIterator \
+		/home/daniele/work/frameworks/Qt/5.5/gcc_64/include/QtCore/qdiriterator.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o armcontrolgui.o ../ArmGui/armcontrolgui.cpp
 
 moc_armcontrolgui.o: moc_armcontrolgui.cpp 
