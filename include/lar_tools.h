@@ -9,9 +9,17 @@
 #define LAR_TOOLS_H
 
 #include <fstream>
+
+//ROS
 #include <ros/ros.h>
-#include <eigen3/Eigen/Core>
+#include "geometry_msgs/Pose.h"
 #include <kdl/frames_io.hpp>
+#include <tf/tf.h>
+
+//EIGEN
+#include <eigen3/Eigen/Core>
+
+
 
 namespace lar_tools {
 
@@ -206,6 +214,35 @@ Eigen::Matrix4d load_transform_4x4_d(const std::string& filename){
         return mat;
 }
 
+/**
+ * Builds TF from geometry_msgs::Pose TODO: reverse
+ */
+void geometrypose_to_tf(geometry_msgs::Pose& pose,  tf::Transform& t, bool reverse = false){
+        if(!reverse) {
+                t.setOrigin( tf::Vector3(
+                                     pose.position.x,
+                                     pose.position.y,
+                                     pose.position.z
+                                     ));
+
+                tf::Quaternion q(
+                        pose.orientation.x,
+                        pose.orientation.y,
+                        pose.orientation.z,
+                        pose.orientation.w
+                        );
+
+                t.setRotation(q);
+        }else{
+          pose.position.x = t.getOrigin()[0];
+          pose.position.y = t.getOrigin()[1];
+          pose.position.z = t.getOrigin()[2];
+          pose.orientation.x = t.getRotation().x();
+          pose.orientation.y = t.getRotation().y();
+          pose.orientation.z = t.getRotation().z();
+          pose.orientation.w = t.getRotation().w();
+        }
+}
 
 }
 
