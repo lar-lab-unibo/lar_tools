@@ -234,14 +234,40 @@ void geometrypose_to_tf(geometry_msgs::Pose& pose,  tf::Transform& t, bool rever
 
                 t.setRotation(q);
         }else{
-          pose.position.x = t.getOrigin()[0];
-          pose.position.y = t.getOrigin()[1];
-          pose.position.z = t.getOrigin()[2];
-          pose.orientation.x = t.getRotation().x();
-          pose.orientation.y = t.getRotation().y();
-          pose.orientation.z = t.getRotation().z();
-          pose.orientation.w = t.getRotation().w();
+                pose.position.x = t.getOrigin()[0];
+                pose.position.y = t.getOrigin()[1];
+                pose.position.z = t.getOrigin()[2];
+                pose.orientation.x = t.getRotation().x();
+                pose.orientation.y = t.getRotation().y();
+                pose.orientation.z = t.getRotation().z();
+                pose.orientation.w = t.getRotation().w();
         }
+}
+
+/**
+ * Builds TF from geometry_msgs::Pose TODO: reverse
+ */
+void create_eigen_4x4(const geometry_msgs::Pose& pose,  Eigen::Matrix4f& mat){
+
+        mat << 1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1;
+
+        mat(0,3) = pose.position.x;
+        mat(1,3) = pose.position.y;
+        mat(2,3) = pose.position.z;
+
+        tf::Quaternion q(
+                pose.orientation.x,
+                pose.orientation.y,
+                pose.orientation.z,
+                pose.orientation.w
+                );
+
+        tf::Matrix3x3 m(q);
+        for(int i = 0; i < 3; i++)
+                for(int j = 0; j < 3; j++)
+                        mat(i,j)=m[i][j];
+
+
 }
 
 }
