@@ -266,8 +266,30 @@ void create_eigen_4x4(const geometry_msgs::Pose& pose,  Eigen::Matrix4f& mat){
         for(int i = 0; i < 3; i++)
                 for(int j = 0; j < 3; j++)
                         mat(i,j)=m[i][j];
+}
 
+/**
+ * Builds TF from geometry_msgs::Pose TODO: reverse
+ */
+void create_eigen_4x4_d(const geometry_msgs::Pose& pose,  Eigen::Matrix4d& mat){
 
+        mat << 1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1;
+
+        mat(0,3) = pose.position.x;
+        mat(1,3) = pose.position.y;
+        mat(2,3) = pose.position.z;
+
+        tf::Quaternion q(
+                pose.orientation.x,
+                pose.orientation.y,
+                pose.orientation.z,
+                pose.orientation.w
+                );
+
+        tf::Matrix3x3 m(q);
+        for(int i = 0; i < 3; i++)
+                for(int j = 0; j < 3; j++)
+                        mat(i,j)=m[i][j];
 }
 
 }
