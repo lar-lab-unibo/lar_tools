@@ -245,6 +245,103 @@ void geometrypose_to_tf(geometry_msgs::Pose& pose,  tf::Transform& t, bool rever
 }
 
 /**
+ * Gets  X,Y,Z, ROLL,PITCH,YAW from GeoemtryPose ù
+ */
+void geometrypose_to_xyzrpy(geometry_msgs::Pose& pose, float& x,float& y,float& z,float& roll,float& pitch,float& yaw){
+
+        x=pose.position.x;
+        y=pose.position.y;
+        z=pose.position.z;
+
+        tf::Quaternion q(
+                pose.orientation.x,
+                pose.orientation.y,
+                pose.orientation.z,
+                pose.orientation.w
+                );
+        tf::Matrix3x3 rot(q);
+        double dr,dp,dy;
+        rot.getRPY(dr,dp,dy);
+        roll = dr;
+        pitch = dp;
+        yaw = dy;
+}
+
+/**
+ * Gets  X,Y,Z, ROLL,PITCH,YAW from GeoemtryPose ù
+ */
+void geometrypose_to_xyzrpy_d(geometry_msgs::Pose& pose, double& x,double& y,double& z,double& roll,double& pitch,double& yaw){
+
+        x=pose.position.x;
+        y=pose.position.y;
+        z=pose.position.z;
+
+        tf::Quaternion q(
+                pose.orientation.x,
+                pose.orientation.y,
+                pose.orientation.z,
+                pose.orientation.w
+                );
+        tf::Matrix3x3 rot(q);
+        rot.getRPY(roll,pitch,yaw);
+}
+
+/**
+ * Gets GeoemtryPose from X,Y,Z, ROLL,PITCH,YAW
+ */
+void xyzrpy_to_geometrypose_d( double& x,double& y,double& z,double& roll,double& pitch,double& yaw, geometry_msgs::Pose& pose){
+
+        pose.position.x = x;
+        pose.position.y = y;
+        pose.position.z = z;
+
+
+        tf::Matrix3x3 rot;
+        rot.setRPY(roll,pitch,yaw);
+        tf::Quaternion q;
+        rot.getRotation(q);
+        pose.orientation.x = q.x();
+        pose.orientation.y = q.y();
+        pose.orientation.z = q.z();
+        pose.orientation.w = q.w();
+}
+
+/**
+ * Builds TF from geometry_msgs::Pose TODO: reverse
+ */
+void eigen_4x4_d_to_tf(Eigen::Matrix4d& t,  tf::Transform& tf, bool reverse = false){
+        if(!reverse) {
+                tf.setOrigin( tf::Vector3(
+                                      t(0,3),
+                                      t(1,3),
+                                      t(2,3)
+                                      ));
+
+                tf::Matrix3x3 rot;
+                for(int i = 0; i < 3; i++)
+                        for(int j = 0; j < 3; j++)
+                                rot[i][j] = t(i,j);
+
+                tf::Quaternion q;
+                rot.getRotation(q);
+                q.normalize();
+                tf.setRotation(q);
+        }else{
+                t = Eigen::Matrix4d::Identity();
+                t(0,3) = tf.getOrigin()[0];
+                t(1,3) = tf.getOrigin()[1];
+                t(2,3) = tf.getOrigin()[2];
+
+                tf::Matrix3x3 rot;
+                rot.setRotation(tf.getRotation());
+                for(int i = 0; i < 3; i++)
+                        for(int j = 0; j < 3; j++)
+                                t(i,j) = rot[i][j];
+
+        }
+}
+
+/**
  * Builds TF from geometry_msgs::Pose TODO: reverse
  */
 void create_eigen_4x4(const geometry_msgs::Pose& pose,  Eigen::Matrix4f& mat){
@@ -290,6 +387,29 @@ void create_eigen_4x4_d(const geometry_msgs::Pose& pose,  Eigen::Matrix4d& mat){
         for(int i = 0; i < 3; i++)
                 for(int j = 0; j < 3; j++)
                         mat(i,j)=m[i][j];
+}
+
+/**
+ * Builds TF from geometry_msgs::Pose TODO: reverse
+ */
+void eigen_4x4_to_geometrypose_d(Eigen::Matrix4d& mat,geometry_msgs::Pose& pose){
+
+        pose.position.x = mat(0,3);
+        pose.position.y = mat(1,3);
+        pose.position.z = mat(2,3);
+
+        tf::Matrix3x3 m;
+        for(int i = 0; i < 3; i++)
+                for(int j = 0; j < 3; j++)
+                        m[i][j]=mat(i,j);
+
+        tf::Quaternion q;
+        m.getRotation(q);
+
+        pose.orientation.x = q.x();
+        pose.orientation.y = q.y();
+        pose.orientation.z = q.z();
+        pose.orientation.w = q.w();
 }
 
 }
