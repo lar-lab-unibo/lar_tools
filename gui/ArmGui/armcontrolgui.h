@@ -14,6 +14,18 @@
 #define ARMCONTROLGUI_USER_FOLDER_PREFIX ".armcontrolgui"
 #define ARMCONTROLGUI_SHAPE_EXTENSION ".txt"
 
+#define COMMAND_RECEIVE_JOINTS 333
+#define COMMAND_RECEIVE_CARTESIAN 777
+
+#define COMMAND_SEND_JOINTS 333
+#define COMMAND_SEND_CARTESIAN 777
+#define COMMAND_SEND_CARTESIAN_TARGET 778
+
+
+#define OP_MODE_JOINT 10001
+#define OP_MODE_CARTESIAN 10005
+#define OP_MODE_TARGET 10010
+
 namespace Ui {
 class ArmControlGui;
 
@@ -78,7 +90,12 @@ private slots:
     void btnLoadShape();
     void btnDeleteShape();
     void receiveMessage();
+    //TESTING
+    void testCheck(int value);
+    void testTarget(int value);
 private:
+    bool connected;
+    int op_mode;
 
     QUdpSocket* receive_socket;
     QUdpSocket* send_socket;
@@ -104,6 +121,8 @@ private:
     void initializeJoints();
     void updateJointsLCD();
     void sendJoints();
+    void sendCartesian();
+    void sendWhatever();
     void updateCartesianLCD();
 
 
@@ -133,6 +152,7 @@ public:
     void run(){
         while(true){
             this->socket->readDatagram( (char*)&message, sizeof(message) );
+            qDebug()<<"Readed "<<message.payload[0];
             this->gui->consumeUDPMessage(this->message);
             this->msleep(100);
         }

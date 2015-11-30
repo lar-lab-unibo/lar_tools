@@ -16,9 +16,9 @@ ArmControlGui::ArmControlGui(std::string robot_name,QWidget *parent) :
 {
     ui->setupUi(this);
 
-
-
-
+    /* CONNECTION CHECK FLAG */
+    this->connected = false;
+    this->op_mode = OP_MODE_JOINT;
 
 
 
@@ -50,6 +50,13 @@ ArmControlGui::ArmControlGui(std::string robot_name,QWidget *parent) :
     connect(ui->slider_cart_pitch,SIGNAL(valueChanged(int)),this,SLOT(cartesiansSignal(int)));
     connect(ui->slider_cart_yaw,SIGNAL(valueChanged(int)),this,SLOT(cartesiansSignal(int)));
 
+    //TEST
+    connect(ui->test_cartesian_check,SIGNAL(stateChanged(int)),this,SLOT(testCheck(int)));
+    connect(ui->test_target_check,SIGNAL(stateChanged(int)),this,SLOT(testCheck(int)));
+    connect(ui->test_slider_target_azimuth,SIGNAL(valueChanged(int)),this,SLOT(testTarget(int)));
+    connect(ui->test_slider_target_zenith,SIGNAL(valueChanged(int)),this,SLOT(testTarget(int)));
+    connect(ui->test_slider_target_distance,SIGNAL(valueChanged(int)),this,SLOT(testTarget(int)));
+    connect(ui->test_slider_target_roll,SIGNAL(valueChanged(int)),this,SLOT(testTarget(int)));
 
 
 
@@ -125,21 +132,75 @@ UserFolderTree ArmControlGui::createUserFolder(QString& robot_name){
  */
 void ArmControlGui::jointsSignal(int value){
     QSlider* obj = (QSlider*)sender();
-    qDebug()<<obj->objectName()<<" "<<value;
+    //qDebug()<<obj->objectName()<<" "<<value;
     this->updateJointsLCD();
-    this->sendJoints();
+    if(this->op_mode == OP_MODE_JOINT){
+        this->sendJoints();
+    }
 }
 
 /**
  * @brief ArmControlGui::sendJoints
  */
 void ArmControlGui::sendJoints(){
-    this->send_message.command=333;
-    for(int i = 0; i < ARMCONTROLGUI_ARM_JOINTS_SIZE; i++){
-        this->send_message.payload[i] = this->sliders_joints[i]->value();
+    if(this->connected){
+        this->send_message.command=COMMAND_SEND_JOINTS;
+        for(int i = 0; i < ARMCONTROLGUI_ARM_JOINTS_SIZE; i++){
+            this->send_message.payload[i] = this->sliders_joints[i]->value();
+        }
+        char* arr = reinterpret_cast<char*>(&this->send_message);
+        this->send_socket->writeDatagram(arr,sizeof(this->send_message),this->remote_host,this->remote_port);
     }
+}
+
+/**
+ * @brief ArmControlGui::sendWhatever
+ */
+void ArmControlGui::sendWhatever(){
+    if(this->op_mode == OP_MODE_JOINT){
+        this->sendJoints();
+    }
+    if(this->op_mode==OP_MODE_CARTESIAN){
+        this->sendCartesian();
+    }
+}
+
+/**
+ * @brief ArmControlGui::testCheck
+ * @param value
+ */
+void ArmControlGui::testCheck(int value){
+    if(this->ui->test_cartesian_check->isChecked()){
+        this->op_mode = OP_MODE_CARTESIAN;
+    }else{
+        this->op_mode = OP_MODE_JOINT;
+    }
+    if(this->ui->test_target_check->isChecked()){
+        this->op_mode = OP_MODE_TARGET;
+
+    }
+    this->sendWhatever();
+}
+
+/**
+ * @brief ArmControlGui::testTarget
+ * @param value
+ */
+void ArmControlGui::testTarget(int value){
+    qDebug()<<COMMAND_SEND_CARTESIAN_TARGET;
+    this->send_message.command = COMMAND_SEND_CARTESIAN_TARGET;
+    this->send_message.payload[0] = this->ui->test_target_x->text().toDouble();
+    this->send_message.payload[1] = this->ui->test_target_y->text().toDouble();
+    this->send_message.payload[2] = this->ui->test_target_z->text().toDouble();
+
+    this->send_message.payload[3] = this->ui->test_slider_target_azimuth->value();
+    this->send_message.payload[4] = this->ui->test_slider_target_zenith->value();
+    this->send_message.payload[5] = this->ui->test_slider_target_roll->value();
+    this->send_message.payload[6] = this->ui->test_slider_target_distance->value();
+    this->send_message.payload[7] = this->op_mode == OP_MODE_TARGET ? 1000:-1000;
     char* arr = reinterpret_cast<char*>(&this->send_message);
     this->send_socket->writeDatagram(arr,sizeof(this->send_message),this->remote_host,this->remote_port);
+
 }
 
 /**
@@ -148,6 +209,24 @@ void ArmControlGui::sendJoints(){
  */
 void ArmControlGui::cartesiansSignal(int value){
     this->updateCartesianLCD();
+    if(this->op_mode==OP_MODE_CARTESIAN){
+        this->sendCartesian();
+    }
+}
+
+
+void ArmControlGui::sendCartesian(){
+    if(this->connected){
+        this->send_message.command=COMMAND_SEND_CARTESIAN;
+        this->send_message.payload[0] = this->ui->slider_cart_x->value();
+        this->send_message.payload[1] = this->ui->slider_cart_y->value();
+        this->send_message.payload[2] = this->ui->slider_cart_z->value();
+        this->send_message.payload[3] = this->ui->slider_cart_roll->value();
+        this->send_message.payload[4] = this->ui->slider_cart_pitch->value();
+        this->send_message.payload[5] = this->ui->slider_cart_yaw->value();
+        char* arr = reinterpret_cast<char*>(&this->send_message);
+        this->send_socket->writeDatagram(arr,sizeof(this->send_message),this->remote_host,this->remote_port);
+    }
 }
 
 /**
@@ -269,6 +348,10 @@ void ArmControlGui::loadShape(QString& filename,JointShape &shape){
 void ArmControlGui::loadShapes(){
     available_shapes.clear();
     QDirIterator it(this->user_folder.shapes,  QDir::Files);
+
+
+    QVector<QString> shape_names;
+
     while (it.hasNext()) {
         QString filename = it.next();
         if(filename.contains("~"))continue;
@@ -277,12 +360,18 @@ void ArmControlGui::loadShapes(){
         this->loadShape(filename,shape);
         if(!this->findShapeByName(shape.name,shape)){
             available_shapes.push_back(shape);
+            shape_names.push_back(shape.name);
         }
     }
 
+    //A-Z order
+    qSort(shape_names.begin(),shape_names.end());
+
+
+
     ui->list_shapes->clear();
-    for(int i = 0; i < available_shapes.size();i++){
-        QListWidgetItem* item = new QListWidgetItem(available_shapes[i].name);
+    for(int i = 0; i < shape_names.size();i++){
+        QListWidgetItem* item = new QListWidgetItem(shape_names[i]);
         ui->list_shapes->addItem(item);
     }
 }
@@ -346,11 +435,37 @@ void ArmControlGui::setCurrentJointShape(JointShape &shape){
  */
 void ArmControlGui::consumeUDPMessage(UDPMessage &message){
 
-    if(message.command==333){
+    if(message.command==COMMAND_RECEIVE_JOINTS){
         QLCDNumber* lcd;
         for(int i = 0; i < ARMCONTROLGUI_ARM_JOINTS_SIZE; i++){
             lcd = this->lcd_joints_real[i];
             lcd->display(message.payload[i]);
         }
+        if(!this->connected){
+            for(int i = 0; i < ARMCONTROLGUI_ARM_JOINTS_SIZE; i++){
+                this->sliders_joints[i]->setValue(message.payload[i]);
+            }
+        }
+        this->connected = true;
+        if(this->op_mode == OP_MODE_CARTESIAN || this->op_mode == OP_MODE_TARGET){
+            for(int i = 0; i < ARMCONTROLGUI_ARM_JOINTS_SIZE; i++){
+                this->sliders_joints[i]->setValue(message.payload[i]);
+            }
+            this->updateJointsLCD();
+        }
+
     }
+    if(message.command==COMMAND_RECEIVE_CARTESIAN){
+        if(this->op_mode == OP_MODE_JOINT || this->op_mode == OP_MODE_TARGET){
+            QLCDNumber* lcd;
+            this->ui->slider_cart_x->setValue(message.payload[0]);
+            this->ui->slider_cart_y->setValue(message.payload[1]);
+            this->ui->slider_cart_z->setValue(message.payload[2]);
+            this->ui->slider_cart_roll->setValue(message.payload[3]);
+            this->ui->slider_cart_pitch->setValue(message.payload[4]);
+            this->ui->slider_cart_yaw->setValue(message.payload[5]);
+            this->updateCartesianLCD();
+        }
+    }
+
 }
