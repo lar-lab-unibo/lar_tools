@@ -246,13 +246,12 @@ void ArmControlGui::updateJointsLCD(){
  * @brief ArmControlGui::updateCartesianLCD
  */
 void ArmControlGui::updateCartesianLCD(){
-
-    ui->lcd_cart_x->display(ui->slider_cart_x->value());
-    ui->lcd_cart_y->display(ui->slider_cart_y->value());
-    ui->lcd_cart_z->display(ui->slider_cart_z->value());
-    ui->lcd_cart_roll->display(ui->slider_cart_roll->value());
-    ui->lcd_cart_pitch->display(ui->slider_cart_pitch->value());
-    ui->lcd_cart_yaw->display(ui->slider_cart_yaw->value());
+        ui->lcd_cart_x->display(ui->slider_cart_x->value());
+        ui->lcd_cart_y->display(ui->slider_cart_y->value());
+        ui->lcd_cart_z->display(ui->slider_cart_z->value());
+        ui->lcd_cart_roll->display(ui->slider_cart_roll->value());
+        ui->lcd_cart_pitch->display(ui->slider_cart_pitch->value());
+        ui->lcd_cart_yaw->display(ui->slider_cart_yaw->value());
 }
 
 /**
@@ -464,7 +463,7 @@ void ArmControlGui::consumeUDPMessage(UDPMessage &message){
             this->ui->slider_cart_roll->setValue(message.payload[3]);
             this->ui->slider_cart_pitch->setValue(message.payload[4]);
             this->ui->slider_cart_yaw->setValue(message.payload[5]);
-            this->updateCartesianLCD();
+            //this->updateCartesianLCD();
         }
     }
 
