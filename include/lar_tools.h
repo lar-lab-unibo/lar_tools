@@ -63,6 +63,38 @@ void rotation_matrix_4x4(char axis, float angle, Eigen::Matrix4f& out) {
 }
 
 /**
+ * Builds Rotation matrix in 4x4 Form
+ * @param axis x,y,z
+ * @param angle angle in radians
+ * @param out OUTPUT
+ */
+void rotation_matrix_4x4_d(char axis, float angle, Eigen::Matrix4d& out) {
+        if (axis == 'x') {
+                out <<
+                1, 0, 0, 0,
+                0, cos(angle), -sin(angle), 0,
+                0, sin(angle), cos(angle), 0,
+                0, 0, 0, 1;
+        } else if (axis == 'y') {
+                out <<
+                cos(angle), 0, sin(angle), 0,
+                0, 1, 0, 0,
+                -sin(angle), 0, cos(angle), 0,
+                0, 0, 0, 1;
+        } else if (axis == 'z') {
+                out <<
+                cos(angle), -sin(angle), 0, 0,
+                sin(angle), cos(angle), 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1;
+        } else {
+                out << 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1;
+        }
+}
+
+
+
+/**
  * Creates KDL Frame
  * @param x
  * @param y
