@@ -300,6 +300,22 @@ void geometrypose_to_xyzrpy(geometry_msgs::Pose& pose, float& x,float& y,float& 
 }
 
 /**
+ * Gets  X,Y,Z, ROLL,PITCH,YAW from Eigen 4x4
+ */
+void eigen_4x4_to_xyzrpy_d(Eigen::Matrix4d& m, double& x,double& y,double& z,double& roll,double& pitch,double& yaw){
+
+        x=m(0,3);
+        y=m(1,3);
+        z=m(2,3);
+
+        tf::Matrix3x3 rot;
+        for(int i = 0; i < 3; i++)
+          for(int j = 0; j < 3; j++)
+            rot[i][j] = m(i,j);
+        rot.getRPY(roll,pitch,yaw);
+}
+
+/**
  * Gets  X,Y,Z, ROLL,PITCH,YAW from GeoemtryPose ù
  */
 void geometrypose_to_xyzrpy_d(geometry_msgs::Pose& pose, double& x,double& y,double& z,double& roll,double& pitch,double& yaw){
