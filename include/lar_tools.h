@@ -164,6 +164,7 @@ void kdl_to_eigen_4x4_d(KDL::Frame& frame, Eigen::Matrix4d& mat) {
  * @param mat
  */
 void create_eigen_4x4(float x, float y, float z, float roll, float pitch, float yaw, Eigen::Matrix4f& mat) {
+        mat = Eigen::Matrix4f::Identity();
         KDL::Frame frame;
         create_kdl_frame(x, y, z, roll, pitch, yaw, frame);
         kdl_to_eigen_4x4(frame, mat);
@@ -180,6 +181,7 @@ void create_eigen_4x4(float x, float y, float z, float roll, float pitch, float 
  * @param mat
  */
 void create_eigen_4x4_d(float x, float y, float z, float roll, float pitch, float yaw, Eigen::Matrix4d& mat) {
+        mat = Eigen::Matrix4d::Identity();
         KDL::Frame frame;
         create_kdl_frame(x, y, z, roll, pitch, yaw, frame);
         kdl_to_eigen_4x4_d(frame, mat);

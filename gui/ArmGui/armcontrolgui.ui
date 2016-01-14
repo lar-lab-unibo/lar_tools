@@ -4228,7 +4228,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>0.8827</string>
+     <string>0.773</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="test_target_y">
@@ -4241,7 +4241,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>-0.2412</string>
+     <string>-0.261</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="test_target_z">
@@ -4254,7 +4254,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>-0.241</string>
+     <string>-0.255</string>
     </property>
    </widget>
    <widget class="QSlider" name="test_slider_target_azimuth">
