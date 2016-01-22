@@ -293,6 +293,7 @@ void geometrypose_to_xyzrpy(geometry_msgs::Pose& pose, float& x,float& y,float& 
                 pose.orientation.z,
                 pose.orientation.w
                 );
+        q.normalize();
         tf::Matrix3x3 rot(q);
         double dr,dp,dy;
         rot.getRPY(dr,dp,dy);
@@ -312,8 +313,8 @@ void eigen_4x4_to_xyzrpy_d(Eigen::Matrix4d& m, double& x,double& y,double& z,dou
 
         tf::Matrix3x3 rot;
         for(int i = 0; i < 3; i++)
-          for(int j = 0; j < 3; j++)
-            rot[i][j] = m(i,j);
+                for(int j = 0; j < 3; j++)
+                        rot[i][j] = m(i,j);
         rot.getRPY(roll,pitch,yaw);
 }
 
@@ -332,6 +333,7 @@ void geometrypose_to_xyzrpy_d(geometry_msgs::Pose& pose, double& x,double& y,dou
                 pose.orientation.z,
                 pose.orientation.w
                 );
+                q.normalize();
         tf::Matrix3x3 rot(q);
         rot.getRPY(roll,pitch,yaw);
 }
@@ -350,6 +352,7 @@ void xyzrpy_to_geometrypose_d( double& x,double& y,double& z,double& roll,double
         rot.setRPY(roll,pitch,yaw);
         tf::Quaternion q;
         rot.getRotation(q);
+        q.normalize();
         pose.orientation.x = q.x();
         pose.orientation.y = q.y();
         pose.orientation.z = q.z();
@@ -408,7 +411,7 @@ void create_eigen_4x4(const geometry_msgs::Pose& pose,  Eigen::Matrix4f& mat){
                 pose.orientation.z,
                 pose.orientation.w
                 );
-
+                q.normalize();
         tf::Matrix3x3 m(q);
         for(int i = 0; i < 3; i++)
                 for(int j = 0; j < 3; j++)
@@ -432,7 +435,7 @@ void create_eigen_4x4_d(const geometry_msgs::Pose& pose,  Eigen::Matrix4d& mat){
                 pose.orientation.z,
                 pose.orientation.w
                 );
-
+        q.normalize();
         tf::Matrix3x3 m(q);
         for(int i = 0; i < 3; i++)
                 for(int j = 0; j < 3; j++)
@@ -455,7 +458,7 @@ void eigen_4x4_to_geometrypose_d(Eigen::Matrix4d& mat,geometry_msgs::Pose& pose)
 
         tf::Quaternion q;
         m.getRotation(q);
-
+        q.normalize();
         pose.orientation.x = q.x();
         pose.orientation.y = q.y();
         pose.orientation.z = q.z();

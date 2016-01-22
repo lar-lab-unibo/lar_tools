@@ -93,6 +93,12 @@ private slots:
     //TESTING
     void testCheck(int value);
     void testTarget(int value);
+    void on_gripper_reset_clicked();
+
+    void on_gripper_open_clicked();
+
+    void on_gripper_close_clicked();
+
 private:
     bool connected;
     int op_mode;

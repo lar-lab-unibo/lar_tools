@@ -3,7 +3,8 @@
 #include <QDebug>
 #include <QDir>
 #include <QDirIterator>
-
+#include <QProcess>
+#include <QStringList>
 
 /**
  * @brief ArmControlGui::ArmControlGui
@@ -467,4 +468,76 @@ void ArmControlGui::consumeUDPMessage(UDPMessage &message){
         }
     }
 
+}
+
+//DA QUI IN POI é SOLO TEST!!
+void ArmControlGui::on_gripper_reset_clicked()
+{
+    QProcess process;
+    QStringList arguments;
+    arguments << "0";
+    process.start("/usr/bin/gripper_command",arguments);
+
+    if(!process.waitForStarted()){
+        qDebug()<<"BOH";
+    }
+
+
+    // Continue reading the data until EOF reached
+    QByteArray data;
+
+    while(process.waitForReadyRead())
+        data.append(process.readAll());
+
+    // Output the data
+    qDebug(data.data());
+    qDebug("Done!");
+}
+
+void ArmControlGui::on_gripper_open_clicked()
+{
+    QProcess process;
+    QStringList arguments;
+    arguments << "90";
+    process.start("/usr/bin/gripper_command",arguments);
+
+    if(!process.waitForStarted()){
+        qDebug()<<"BOH";
+    }
+
+
+    // Continue reading the data until EOF reached
+    QByteArray data;
+
+    while(process.waitForReadyRead())
+        data.append(process.readAll());
+
+    // Output the data
+    qDebug(data.data());
+    qDebug("Done!");
+}
+
+void ArmControlGui::on_gripper_close_clicked()
+{
+    QProcess process;
+    QStringList arguments;
+    arguments << "150";
+    process.start("gripper_command 150",arguments);
+    process.waitForFinished();
+    process.close();
+    if(!process.waitForStarted()){
+        qDebug()<<"BOH";
+    }
+    process.waitForFinished(3000);
+
+
+    // Continue reading the data until EOF reached
+    QByteArray data;
+
+    while(process.waitForReadyRead())
+        data.append(process.readAll());
+
+    // Output the data
+    qDebug(data.data());
+    qDebug("Done!");
 }
